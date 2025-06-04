@@ -418,8 +418,14 @@ func (c *EWSClient) DeleteCalendarEvent(itemID string) error {
 
 // EventUpdates represents updates to an existing calendar event
 type EventUpdates struct {
-	Start *time.Time
-	End   *time.Time
+	Start             *time.Time
+	End               *time.Time
+	Subject           *string
+	Body              *string
+	LegacyFreeBusy    *string
+	Location          *string
+	RequiredAttendees []Attendee
+	OptionalAttendees []Attendee
 }
 
 // UpdateCalendarEvent updates a calendar event by its ID
@@ -482,6 +488,127 @@ func (c *EWSClient) UpdateCalendarEvent(itemID string, updates EventUpdates) err
 				},
 				CalendarItem: UpdateCalendarItem{
 					End: &endStr,
+				},
+			},
+		)
+	}
+
+	// Add Subject update if provided
+	if updates.Subject != nil {
+		envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField = append(
+			envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField,
+			SetItemField{
+				FieldURI: FieldURI{
+					FieldURI: "item:Subject",
+				},
+				CalendarItem: UpdateCalendarItem{
+					Subject: updates.Subject,
+				},
+			},
+		)
+	}
+
+	// Add Body (notes) update if provided
+	if updates.Body != nil {
+		envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField = append(
+			envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField,
+			SetItemField{
+				FieldURI: FieldURI{
+					FieldURI: "item:Body",
+				},
+				CalendarItem: UpdateCalendarItem{
+					Body: &ItemBody{
+						BodyType: "Text",
+						Content:  *updates.Body,
+					},
+				},
+			},
+		)
+	}
+
+	// Add LegacyFreeBusy update if provided
+	if updates.LegacyFreeBusy != nil {
+		envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField = append(
+			envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField,
+			SetItemField{
+				FieldURI: FieldURI{
+					FieldURI: "calendar:LegacyFreeBusyStatus",
+				},
+				CalendarItem: UpdateCalendarItem{
+					LegacyFreeBusy: updates.LegacyFreeBusy,
+				},
+			},
+		)
+	}
+
+	// Add Location update if provided
+	if updates.Location != nil {
+		envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField = append(
+			envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField,
+			SetItemField{
+				FieldURI: FieldURI{
+					FieldURI: "calendar:Location",
+				},
+				CalendarItem: UpdateCalendarItem{
+					Location: updates.Location,
+				},
+			},
+		)
+	}
+
+	// Add Required Attendees if provided
+	if len(updates.RequiredAttendees) > 0 {
+		requiredAttendees := RequiredAttendees{
+			Attendees: make([]AttendeeType, len(updates.RequiredAttendees)),
+		}
+
+		for i, attendee := range updates.RequiredAttendees {
+			requiredAttendees.Attendees[i] = AttendeeType{
+				Mailbox: EmailAddress{
+					Name:         attendee.Name,
+					EmailAddress: attendee.Email,
+					RoutingType:  "SMTP",
+				},
+			}
+		}
+
+		envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField = append(
+			envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField,
+			SetItemField{
+				FieldURI: FieldURI{
+					FieldURI: "calendar:RequiredAttendees",
+				},
+				CalendarItem: UpdateCalendarItem{
+					RequiredAttendees: &requiredAttendees,
+				},
+			},
+		)
+	}
+
+	// Add Optional Attendees if provided
+	if len(updates.OptionalAttendees) > 0 {
+		optionalAttendees := OptionalAttendees{
+			Attendees: make([]AttendeeType, len(updates.OptionalAttendees)),
+		}
+
+		for i, attendee := range updates.OptionalAttendees {
+			optionalAttendees.Attendees[i] = AttendeeType{
+				Mailbox: EmailAddress{
+					Name:         attendee.Name,
+					EmailAddress: attendee.Email,
+					RoutingType:  "SMTP",
+				},
+			}
+		}
+
+		envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField = append(
+			envelope.Body.UpdateItem.ItemChanges.ItemChange.Updates.SetItemField,
+			SetItemField{
+				FieldURI: FieldURI{
+					FieldURI: "calendar:OptionalAttendees",
+				},
+				CalendarItem: UpdateCalendarItem{
+					OptionalAttendees: &optionalAttendees,
 				},
 			},
 		)

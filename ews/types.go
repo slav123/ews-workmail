@@ -47,12 +47,13 @@ type Items struct {
 }
 
 type CalendarItem struct {
-	ItemId    ItemId `xml:"ItemId"`
-	Subject   string `xml:"Subject"`
-	Start     string `xml:"Start"`
-	End       string `xml:"End"`
-	Location  string `xml:"Location"`
-	Organizer struct {
+	ItemId       ItemId `xml:"ItemId"`
+	Subject      string `xml:"Subject"`
+	Start        string `xml:"Start"`
+	End          string `xml:"End"`
+	Location     string `xml:"Location"`
+	LegacyFreeBusy string `xml:"LegacyFreeBusyStatus,omitempty"`
+	Organizer    struct {
 		Mailbox struct {
 			Name         string `xml:"Name"`
 			EmailAddress string `xml:"EmailAddress"`
@@ -214,7 +215,12 @@ type FieldURI struct {
 type UpdateCalendarItem struct {
 	Start             *string            `xml:"t:Start,omitempty"`
 	End               *string            `xml:"t:End,omitempty"`
+	Subject           *string            `xml:"t:Subject,omitempty"`
+	Body              *ItemBody          `xml:"t:Body,omitempty"`
+	LegacyFreeBusy    *string            `xml:"t:LegacyFreeBusyStatus,omitempty"`
+	Location          *string            `xml:"t:Location,omitempty"`
 	RequiredAttendees *RequiredAttendees `xml:"t:RequiredAttendees,omitempty"`
+	OptionalAttendees *OptionalAttendees `xml:"t:OptionalAttendees,omitempty"`
 }
 
 type RequiredAttendees struct {

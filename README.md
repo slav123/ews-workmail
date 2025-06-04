@@ -4,6 +4,9 @@ A Go client library for interacting with Amazon WorkMail through the Exchange We
 
 ## Features
 
+- Retrieve calendar items with free/busy status information
+- Check free/busy status for specific time slots
+
 - Retrieve calendar items within a specified date range
 - Check availability for specific time slots
 - Find available time slots within a date range
@@ -54,6 +57,15 @@ if err := client.SetTimezone("Europe/London"); err != nil {
 
 ### Retrieving calendar items
 
+Each calendar item includes a `LegacyFreeBusy` field that indicates the free/busy status of the event. The possible values are:
+- `Free`: The time slot is marked as free
+- `Tentative`: The time slot is tentatively busy
+- `Busy`: The time slot is busy
+- `OOF`: The user is out of office during this time
+- `NoData`: The status is unknown
+
+This field is particularly useful for checking the availability of time slots when scheduling meetings.
+
 ```go
 // Get calendar items for the next 7 days
 startDate := time.Now()
@@ -81,6 +93,7 @@ for _, item := range calendarItems {
     fmt.Printf("Start: %s (Parsed: %s)\n", item.Start, startTime.Format(time.RFC3339))
     fmt.Printf("End: %s (Parsed: %s)\n", item.End, endTime.Format(time.RFC3339))
     fmt.Printf("Duration: %s\n", endTime.Sub(startTime))
+    fmt.Printf("Free/Busy Status: %s\n", item.LegacyFreeBusy)
     fmt.Printf("Location: %s\n", item.Location)
 }
 ```
@@ -119,14 +132,65 @@ fmt.Printf("Created new event with ID: %s\n", *eventID)
 
 ### Updating a calendar event
 
+You can update various aspects of a calendar event including subject, body (notes), start/end times, location, free/busy status, and attendees.
+
 ```go
-// Update an existing calendar event's start and end time
-tomorrow := time.Now().Add(24 * time.Hour)
-dayAfterTomorrow := time.Now().Add(48 * time.Hour)
+// Define updated values
+newSubject := "Updated Team Meeting"
+newBody := "Updated agenda: Project status, next steps, and budget review"
+newStatus := "Busy"  // Options: "Free", "Tentative", "Busy", "OOF" (Out of Office)
+newLocation := "Conference Room B"
+
+// Create new time variables
+newStartTime := time.Now().Add(25 * time.Hour)
+newEndTime := time.Now().Add(26 * time.Hour)
+
+// Define new attendees
+newRequiredAttendee := ews.Attendee{
+    Name:  "Alice Smith",
+    Email: "alice@example.com",
+}
+
+newOptionalAttendee := ews.Attendee{
+    Name:  "Bob Johnson",
+    Email: "bob@example.com",
+}
+
+// Create the updates object with all the fields you want to change
+updates := ews.EventUpdates{
+    // Update the subject and body
+    Subject: &newSubject,
+    Body:    &newBody,
+    
+    // Update the time range
+    Start:   &newStartTime,
+    End:     &newEndTime,
+    
+    // Update other properties
+    Location:       &newLocation,
+    LegacyFreeBusy: &newStatus,
+    
+    // Update attendees (this will replace existing attendees)
+    RequiredAttendees: []ews.Attendee{newRequiredAttendee},
+    OptionalAttendees: []ews.Attendee{newOptionalAttendee},
+}
+
+// Update the event (this will send updated invitations to attendees)
+err := client.UpdateCalendarEvent("event-id-here", updates)
+if err != nil {
+    log.Fatalf("Error updating calendar event: %v", err)
+}
+```
+
+You can include only the fields you want to update. For example, if you only want to update the subject and free/busy status:
+
+```go
+subject := "Quick Status Update"
+status := "Tentative"
 
 updates := ews.EventUpdates{
-    Start: &tomorrow,
-    End:   &dayAfterTomorrow,
+    Subject:        &subject,
+    LegacyFreeBusy: &status,
 }
 
 err := client.UpdateCalendarEvent("event-id-here", updates)
