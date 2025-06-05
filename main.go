@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/slav123/ews-workmail/ews"
@@ -11,8 +12,9 @@ import (
 func main() {
 	// Amazon WorkMail EWS URL and credentials
 	url := "https://ews.mail.us-east-1.awsapps.com/EWS/Exchange.asmx"
-	username := "slav@coreadvisory.com.au"
-	password := "S5FaYaBcoFy3cp"
+
+	username := os.Getenv("username")
+	password := os.Getenv("password")
 
 	// Create a new EWS client with local timezone
 	client := ews.NewClient(url, username, password)
@@ -153,7 +155,7 @@ func main() {
 
 	// Example: Updating a calendar event with new fields
 	fmt.Println("\nUpdating the calendar event with new subject, body, status, and attendees...")
-	
+
 	// Wait a moment before updating
 	time.Sleep(2 * time.Second)
 
