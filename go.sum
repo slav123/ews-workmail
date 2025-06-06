@@ -26,3 +26,5 @@ github.com/aws/aws-sdk-go-v2/service/workmail v1.31.2 h1:ED98zu+qyEHIiPXoBA7QITE
 github.com/aws/aws-sdk-go-v2/service/workmail v1.31.2/go.mod h1:kAb1U4tVDQmzDaYXaXySO5gBvNdV38rfvrvfRd04zKM=
 github.com/aws/smithy-go v1.22.2 h1:6D9hW43xKFrRx/tXXfAlIZc4JI+yQe6snnWcQyxSyLQ=
 github.com/aws/smithy-go v1.22.2/go.mod h1:irrKGvNn1InZwb2d7fkIRNucdfwR8R+Ts3wxYa/cJHg=
+github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
