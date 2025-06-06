@@ -149,9 +149,9 @@ func (c *ImpersonationClient) doRequest(ctx context.Context, soapAction, targetU
 	}
 
 	// Log the XML for UpdateItem requests for debugging
-	if soapAction == "http://schemas.microsoft.com/exchange/services/2006/messages/UpdateItem" {
-		log.Printf("DEBUG: EWS UpdateItem Request XML:\n%s\n", string(xmlData))
-	}
+	// if soapAction == "http://schemas.microsoft.com/exchange/services/2006/messages/UpdateItem" {
+	// 	log.Printf("DEBUG: EWS UpdateItem Request XML:\n%s\n", string(xmlData))
+	// }
 
 	req, err := http.NewRequestWithContext(ctx, "POST", c.ewsEndpoint, bytes.NewReader(xmlData))
 	if err != nil {
@@ -344,7 +344,7 @@ func (c *ImpersonationClient) UpdateCalendarEvent(ctx context.Context, itemId st
 
 	if updates.Subject != nil {
 		itemChanges = append(itemChanges, SetItemField{
-			FieldURI:     FieldURI{FieldURI: "calendar:Subject"},
+			FieldURI:     FieldURI{FieldURI: "item:Subject"},
 			CalendarItem: UpdateCalendarItem{Subject: updates.Subject},
 		})
 	}
@@ -407,6 +407,7 @@ func (c *ImpersonationClient) UpdateCalendarEvent(ctx context.Context, itemId st
 	}
 
 	request := &UpdateItemRequest{
+		XMLNSm:                 "http://schemas.microsoft.com/exchange/services/2006/messages",
 		ConflictResolution:     conflictResolution,
 		SendMeetingInvitations: sendMeetingInvitationsOrCancellations,
 		MessageDisposition:     "SaveOnly",

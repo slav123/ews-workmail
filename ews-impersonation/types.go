@@ -201,10 +201,11 @@ type ItemsArray struct {
 
 type UpdateItemRequest struct {
 	XMLName                xml.Name    `xml:"m:UpdateItem"`
+	XMLNSm                 string      `xml:"xmlns:m,attr"`
 	ConflictResolution     string      `xml:"ConflictResolution,attr"`
 	SendMeetingInvitations string      `xml:"SendMeetingInvitationsOrCancellations,attr"`
 	MessageDisposition     string      `xml:"MessageDisposition,attr,omitempty"`
-	ItemChanges            ItemChanges `xml:"t:ItemChanges"`
+	ItemChanges            ItemChanges `xml:"m:ItemChanges"`
 }
 
 type ItemChanges struct {
