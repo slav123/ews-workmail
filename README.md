@@ -288,12 +288,22 @@ All methods in this library return detailed error messages that include informat
 
 ## Amazon WorkMail EWS URL Format
 
-The EWS URL for Amazon WorkMail typically follows this format:
-```
-https://[organization-alias].awsapps.com/EWS/Exchange.asmx
-```
+The EWS URL for Amazon WorkMail is region-specific. Use the endpoint that corresponds to the AWS Region where your Amazon WorkMail organization is hosted:
 
-Replace `[organization-alias]` with your WorkMail organization alias.
+*   **US East (N. Virginia):**
+    ```
+    https://ews.mail.us-east-1.awsapps.com/EWS/Exchange.asmx
+    ```
+*   **US West (Oregon):**
+    ```
+    https://ews.mail.us-west-2.awsapps.com/EWS/Exchange.asmx
+    ```
+*   **Europe (Ireland):**
+    ```
+    https://ews.mail.eu-west-1.awsapps.com/EWS/Exchange.asmx
+    ```
+
+You will typically use these URLs in conjunction with your organization alias, but the alias itself is not part of the base EWS endpoint URL. Instead, it's often used within your authentication credentials (e.g., `username@organization-alias` or `organization-alias\\username`) or as part of other service discovery mechanisms.
 
 ## Contributing
 
