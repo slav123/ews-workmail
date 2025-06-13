@@ -255,7 +255,7 @@ func (c *EWSClient) CreateCalendarEvent(event CalendarEvent) (*string, error) {
 						Start:           startStr,
 						End:             endStr,
 						IsAllDayEvent:   event.IsAllDay,
-						LegacyFreeBusy:  FreeBusyBusy,
+						LegacyFreeBusy:  Busy,
 						Location:        event.Location,
 					},
 				},

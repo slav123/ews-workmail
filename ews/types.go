@@ -9,11 +9,11 @@ type LegacyFreeBusyStatus string
 
 // LegacyFreeBusyStatus constants
 const (
-	FreeBusyFree      LegacyFreeBusyStatus = "Free"      // Time slot is available
-	FreeBusyTentative LegacyFreeBusyStatus = "Tentative" // Time slot is tentatively booked
-	FreeBusyBusy      LegacyFreeBusyStatus = "Busy"      // Time slot is busy
-	FreeBusyOOF       LegacyFreeBusyStatus = "OOF"       // User is Out of Office
-	FreeBusyNoData    LegacyFreeBusyStatus = "NoData"    // Status is unknown
+	Free      LegacyFreeBusyStatus = "Free"      // Time slot is available
+	Tentative LegacyFreeBusyStatus = "Tentative" // Time slot is tentatively booked
+	Busy      LegacyFreeBusyStatus = "Busy"      // Time slot is busy
+	OOF       LegacyFreeBusyStatus = "OOF"       // User is Out of Office
+	NoData    LegacyFreeBusyStatus = "NoData"    // Status is unknown
 )
 
 // SOAP envelope structures
