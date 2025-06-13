@@ -278,7 +278,7 @@ func (c *ImpersonationClient) CreateCalendarEvent(ctx context.Context, event Cal
 		Start:           c.FormatDateWithTZ(event.Start),
 		End:             c.FormatDateWithTZ(event.End),
 		IsAllDayEvent:   event.IsAllDay,
-		LegacyFreeBusy:  "Busy", // Default, can be made configurable (e.g. Free, Tentative, OOF)
+		LegacyFreeBusy:  FreeBusyBusy, // Default, can be made configurable (e.g. Free, Tentative, OOF)
 		Location:        event.Location,
 	}
 

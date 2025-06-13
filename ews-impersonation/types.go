@@ -5,6 +5,18 @@ import (
 	"time"
 )
 
+// LegacyFreeBusyStatus represents the free/busy status of a calendar item
+type LegacyFreeBusyStatus string
+
+// LegacyFreeBusyStatus constants
+const (
+	FreeBusyFree      LegacyFreeBusyStatus = "Free"      // Time slot is available
+	FreeBusyTentative LegacyFreeBusyStatus = "Tentative" // Time slot is tentatively booked
+	FreeBusyBusy      LegacyFreeBusyStatus = "Busy"      // Time slot is busy
+	FreeBusyOOF       LegacyFreeBusyStatus = "OOF"       // User is Out of Office
+	FreeBusyNoData    LegacyFreeBusyStatus = "NoData"    // Status is unknown
+)
+
 // ExchangeImpersonationType defines the structure for the EWS impersonation header
 type ExchangeImpersonationType struct {
 	XMLName       xml.Name          `xml:"t:ExchangeImpersonation"`
@@ -65,7 +77,7 @@ type CalendarItem struct {
 	End            string `xml:"End"`
 	Location       string `xml:"Location"`
 	IsAllDayEvent  bool   `xml:"IsAllDayEvent,omitempty"`
-	LegacyFreeBusy string `xml:"LegacyFreeBusyStatus,omitempty"`
+	LegacyFreeBusy LegacyFreeBusyStatus `xml:"LegacyFreeBusyStatus,omitempty"`
 	Organizer      struct {
 		Mailbox struct {
 			Name         string `xml:"Name"`
@@ -143,7 +155,7 @@ type CreateEventCalendarItem struct {
 	Start             string             `xml:"t:Start"`
 	End               string             `xml:"t:End"`
 	IsAllDayEvent     bool               `xml:"t:IsAllDayEvent"`
-	LegacyFreeBusy    string             `xml:"t:LegacyFreeBusyStatus"`
+	LegacyFreeBusy    LegacyFreeBusyStatus `xml:"t:LegacyFreeBusyStatus"`
 	Location          string             `xml:"t:Location,omitempty"`
 	RequiredAttendees *RequiredAttendees `xml:"t:RequiredAttendees,omitempty"`
 	OptionalAttendees *OptionalAttendees `xml:"t:OptionalAttendees,omitempty"`
@@ -233,7 +245,7 @@ type UpdateCalendarItem struct {
 	End               *string            `xml:"t:End,omitempty"`
 	Subject           *string            `xml:"t:Subject,omitempty"`
 	Body              *ItemBody          `xml:"t:Body,omitempty"`
-	LegacyFreeBusy    *string            `xml:"t:LegacyFreeBusyStatus,omitempty"`
+	LegacyFreeBusy    *LegacyFreeBusyStatus `xml:"t:LegacyFreeBusyStatus,omitempty"`
 	Location          *string            `xml:"t:Location,omitempty"`
 	RequiredAttendees *RequiredAttendees `xml:"t:RequiredAttendees,omitempty"`
 	OptionalAttendees *OptionalAttendees `xml:"t:OptionalAttendees,omitempty"`
@@ -305,7 +317,7 @@ type EventUpdates struct {
 	End               *time.Time
 	Subject           *string
 	Body              *string // Assumes ItemBody with BodyType="Text"
-	LegacyFreeBusy    *string
+	LegacyFreeBusy    *LegacyFreeBusyStatus
 	Location          *string
 	RequiredAttendees []Attendee
 	OptionalAttendees []Attendee

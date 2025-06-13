@@ -6,7 +6,7 @@ A Go client library for interacting with Amazon WorkMail through the Exchange We
 
 - Retrieve calendar items with free/busy status information
 - Check free/busy status for specific time slots
-
+- Type-safe LegacyFreeBusyStatus constants to prevent errors
 - Retrieve calendar items within a specified date range
 - Check availability for specific time slots
 - Find available time slots within a date range
@@ -60,12 +60,12 @@ if err := client.SetTimezone("Europe/London"); err != nil {
 Each calendar item includes several useful fields:
 
 - **`IsAllDayEvent`**: Boolean indicating whether the event is an all-day event
-- **`LegacyFreeBusy`**: Indicates the free/busy status of the event with possible values:
-  - `Free`: The time slot is marked as free
-  - `Tentative`: The time slot is tentatively busy
-  - `Busy`: The time slot is busy
-  - `OOF`: The user is out of office during this time
-  - `NoData`: The status is unknown
+- **`LegacyFreeBusy`**: Indicates the free/busy status of the event. Use type-safe constants:
+  - `ews.FreeBusyFree`: The time slot is marked as free
+  - `ews.FreeBusyTentative`: The time slot is tentatively busy
+  - `ews.FreeBusyBusy`: The time slot is busy
+  - `ews.FreeBusyOOF`: The user is out of office during this time
+  - `ews.FreeBusyNoData`: The status is unknown
 
 These fields are particularly useful for checking the availability of time slots when scheduling meetings and determining event types.
 
@@ -142,7 +142,7 @@ You can update various aspects of a calendar event including subject, body (note
 // Define updated values
 newSubject := "Updated Team Meeting"
 newBody := "Updated agenda: Project status, next steps, and budget review"
-newStatus := "Busy"  // Options: "Free", "Tentative", "Busy", "OOF" (Out of Office)
+newStatus := ews.FreeBusyBusy  // Options: FreeBusyFree, FreeBusyTentative, FreeBusyBusy, FreeBusyOOF
 newLocation := "Conference Room B"
 
 // Create new time variables
@@ -190,7 +190,7 @@ You can include only the fields you want to update. For example, if you only wan
 
 ```go
 subject := "Quick Status Update"
-status := "Tentative"
+status := ews.FreeBusyTentative
 
 updates := ews.EventUpdates{
     Subject:        &subject,
