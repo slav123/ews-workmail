@@ -64,6 +64,7 @@ type CalendarItem struct {
 	Start          string `xml:"Start"`
 	End            string `xml:"End"`
 	Location       string `xml:"Location"`
+	IsAllDayEvent  bool   `xml:"IsAllDayEvent,omitempty"`
 	LegacyFreeBusy string `xml:"LegacyFreeBusyStatus,omitempty"`
 	Organizer      struct {
 		Mailbox struct {

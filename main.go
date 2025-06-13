@@ -58,10 +58,15 @@ func main() {
 				for _, item := range basicItems {
 					startTime, _ := basicClient.ParseDateTime(item.Start)
 					endTime, _ := basicClient.ParseDateTime(item.End)
-					fmt.Printf("  Subject: %s, Start: %s, End: %s, ID: %s\n",
+					allDayText := "No"
+					if item.IsAllDayEvent {
+						allDayText = "Yes"
+					}
+					fmt.Printf("  Subject: %s, Start: %s, End: %s, All-Day: %s, ID: %s\n",
 						item.Subject,
 						startTime.Format(time.RFC1123),
 						endTime.Format(time.RFC1123),
+						allDayText,
 						item.ItemId.Id,
 					)
 				}
@@ -93,10 +98,15 @@ func main() {
 					for _, item := range impersonatedItems {
 						startTime, _ := impersonationClient.ParseDateTime(item.Start)
 						endTime, _ := impersonationClient.ParseDateTime(item.End)
-						fmt.Printf("  Subject: %s, Start: %s, End: %s, ID: %s\n",
+						allDayText := "No"
+						if item.IsAllDayEvent {
+							allDayText = "Yes"
+						}
+						fmt.Printf("  Subject: %s, Start: %s, End: %s, All-Day: %s, ID: %s\n",
 							item.Subject,
 							startTime.Format(time.RFC1123),
 							endTime.Format(time.RFC1123),
+							allDayText,
 							item.ItemId.Id,
 						)
 					}

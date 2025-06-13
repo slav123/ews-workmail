@@ -57,14 +57,17 @@ if err := client.SetTimezone("Europe/London"); err != nil {
 
 ### Retrieving calendar items
 
-Each calendar item includes a `LegacyFreeBusy` field that indicates the free/busy status of the event. The possible values are:
-- `Free`: The time slot is marked as free
-- `Tentative`: The time slot is tentatively busy
-- `Busy`: The time slot is busy
-- `OOF`: The user is out of office during this time
-- `NoData`: The status is unknown
+Each calendar item includes several useful fields:
 
-This field is particularly useful for checking the availability of time slots when scheduling meetings.
+- **`IsAllDayEvent`**: Boolean indicating whether the event is an all-day event
+- **`LegacyFreeBusy`**: Indicates the free/busy status of the event with possible values:
+  - `Free`: The time slot is marked as free
+  - `Tentative`: The time slot is tentatively busy
+  - `Busy`: The time slot is busy
+  - `OOF`: The user is out of office during this time
+  - `NoData`: The status is unknown
+
+These fields are particularly useful for checking the availability of time slots when scheduling meetings and determining event types.
 
 ```go
 // Get calendar items for the next 7 days
@@ -93,6 +96,7 @@ for _, item := range calendarItems {
     fmt.Printf("Start: %s (Parsed: %s)\n", item.Start, startTime.Format(time.RFC3339))
     fmt.Printf("End: %s (Parsed: %s)\n", item.End, endTime.Format(time.RFC3339))
     fmt.Printf("Duration: %s\n", endTime.Sub(startTime))
+    fmt.Printf("All-Day Event: %t\n", item.IsAllDayEvent)
     fmt.Printf("Free/Busy Status: %s\n", item.LegacyFreeBusy)
     fmt.Printf("Location: %s\n", item.Location)
 }

@@ -47,13 +47,14 @@ type Items struct {
 }
 
 type CalendarItem struct {
-	ItemId       ItemId `xml:"ItemId"`
-	Subject      string `xml:"Subject"`
-	Start        string `xml:"Start"`
-	End          string `xml:"End"`
-	Location     string `xml:"Location"`
+	ItemId         ItemId `xml:"ItemId"`
+	Subject        string `xml:"Subject"`
+	Start          string `xml:"Start"`
+	End            string `xml:"End"`
+	Location       string `xml:"Location"`
+	IsAllDayEvent  bool   `xml:"IsAllDayEvent,omitempty"`
 	LegacyFreeBusy string `xml:"LegacyFreeBusyStatus,omitempty"`
-	Organizer    struct {
+	Organizer      struct {
 		Mailbox struct {
 			Name         string `xml:"Name"`
 			EmailAddress string `xml:"EmailAddress"`
